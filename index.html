@@ -133,7 +133,7 @@
 
         <div class="charts-row">
             <div class="chart-box">
-                <h3>Employees by Column</h3>
+                <h3>Employees by Salary</h3>
                 <canvas id="employeeChart"></canvas>
             </div>
             <div class="chart-box">
@@ -302,17 +302,32 @@
                     data: {
                         labels: labels,
                         datasets: [{
+                            type: "bar",
                             label: "Salary",
                             data: salaries,
                             backgroundColor: labels.map((_, i) => colors[i % colors.length]),
-                            borderRadius: 6
+                            borderRadius: 6,
+                            order: 2
+                        }, {
+                            type: "line",
+                            label: "Salary Trend",
+                            data: salaries,
+                            borderColor: "#764ba2",
+                            backgroundColor: "rgba(118,75,162,0.1)",
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 4,
+                            pointBackgroundColor: "#764ba2",
+                            order: 1
                         }]
                     },
                     options: {
-                        indexAxis: "y",
                         responsive: true,
-                        plugins: { legend: { display: false } },
-                        scales: { x: { beginAtZero: true, ticks: { callback: v => "$" + v.toLocaleString() } } }
+                        plugins: {
+                            legend: { position: "bottom", labels: { padding: 12, font: { size: 12 } } },
+                            tooltip: { callbacks: { label: function(ctx) { return ctx.dataset.label + ": $" + ctx.raw.toLocaleString(); } } }
+                        },
+                        scales: { y: { beginAtZero: true, ticks: { callback: function(v) { return "$" + v.toLocaleString(); } } } }
                     }
                 });
             } else {
